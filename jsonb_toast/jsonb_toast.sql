@@ -51,24 +51,11 @@ create table jsonb_test_table (
 -- insert some data
 -- the simplest possible json doc, just a string literal
 insert into jsonb_test_table (data)
-select
-  (('"' || gen_string_unicode(499) || '"')::json) -- usually no toast
-  from generate_series(1,1) as i;
-insert into jsonb_test_table (data)
-select
-  (('"' || gen_string_unicode(500) || '"')::json) -- usually no toast
-  from generate_series(1,1) as i;
--- insert into jsonb_test_table (data)
--- select
---   (('"' || gen_string_ascii(2031) || '"')::json) -- usually no toast
---   from generate_series(1,1000) as i;
--- insert into jsonb_test_table (data)
--- select
---   (('"' || gen_string_ascii(2032) || '"')::json) -- usually no toast
---   from generate_series(1,1000) as i;
-  --(('"' || gen_string_unicode(500) || '"')::json), -- usually toast
-  --(('"' || gen_string_ascii(2031) || '"')::json),  -- usually no toast
-  --(('"' || gen_string_ascii(2032) || '"')::json);  -- usually toast
+values
+  (('"' || gen_string_unicode(499) || '"')::json), -- usually no toast
+  (('"' || gen_string_unicode(500) || '"')::json), -- usually toast
+  (('"' || gen_string_ascii(2031) || '"')::json),  -- usually no toast
+  (('"' || gen_string_ascii(2032) || '"')::json);  -- usually toast
 
 -- function to get the toast table
 drop function if exists get_toast_table;
@@ -98,4 +85,3 @@ begin
 end;
 $$ language 'plpgsql';
 select num_toasted_rows();
-
