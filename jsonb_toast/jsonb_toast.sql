@@ -85,3 +85,7 @@ begin
 end;
 $$ language 'plpgsql';
 select num_toasted_rows();
+
+-- Interestingly, when I bumped up the inserts to have 1000 rows each of gen_string_unicode(499), gen_string_unicode(500), gen_string_ascii(2031), and gen_string_ascii(2032), the num_toasted_rows is consistently around 2300, presumably due to differences in the compressibility of the random sequences. The ASCII strings seem to have greater variation in this respect, which makes sense given the lower entropy overall.
+--
+-- Restricting to only the gen_string_unicode values, if 10,000 of each (499 and 500 chars) are inserted, we get exactly 10,000 toasted rows. This suggests that the limit for non-toasted (uncompressed) jsonb is between 499 * 4 + 2 = 1998 bytes and 500 * 4 + 2 = 2002 bytes. pg_column_size(jsonb_test_table.*) gives 2032 and 2036 bytes, respectively, for each of these numbers of characters, indicating 34 bytes of overhead.
