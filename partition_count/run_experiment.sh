@@ -7,6 +7,7 @@ docker run \
   -d postgres:16-alpine \
   -c max_locks_per_transaction=256
 sleep 5
+# note: the default max_locks_per_transaction=64 errors for large npart
 
 cat << EOF > set_params.sql
 \set n $npart

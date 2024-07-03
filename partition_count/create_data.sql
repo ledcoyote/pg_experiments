@@ -1,26 +1,4 @@
 -- create_data.sql
--- Charlie Keith 2024
--- How many partitions is safe to use in PostgreSQL if we're able to
--- effectively parition-prune? The docs state that "The query planner is
--- generally able to handle partition hierarchies with up to a few thousand
--- partitions fairly well, provided that typical queries allow the query
--- planner to prune all but a small number of partitions." What if we can
--- always prune to a single partition when LIST-partitioning? Can we grow
--- the number of the partitions unbounded?
---
--- https://www.postgresql.org/docs/current/ddl-partitioning.html
---
--- Usage:
--- $ docker run --name pg_experiments \
--- $   -e POSTGRES_PASSWORD=password \
--- $   -p 5432:5432 \
--- $   -d postgres:16-alpine \
--- $   -c max_locks_per_transaction=256
--- $ psql postgresql://localhost:5432/postgres -U postgres
--- postgres=# \i number_of_partitions.sql
---
--- (note: the default max_locks_per_transaction=64 causes an error when
--- creating a large number of partitions, e.g. 10000)
 
 -- function to create partitions and load them with data
 drop function if exists gen_partitions;
