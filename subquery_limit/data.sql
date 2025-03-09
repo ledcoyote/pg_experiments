@@ -6,8 +6,4 @@ insert into sq_limit_test.project
 insert into sq_limit_test.task (project_id, status)
   select floor(random()*1000), floor(random()*3)
 	from	generate_series(0, 999_999);
-
---insert into sq_limit_test.task (project_id)
---  select floor(random()*1000)
---  from	generate_series(0, 999_999);
-
+  
