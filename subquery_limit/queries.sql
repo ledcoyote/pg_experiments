@@ -2,6 +2,9 @@
 \set o 100
 \set sort 'asc'
 
+-- plans are easier to view with parallel off
+set max_parallel_workers_per_gather = 0;
+
 -- naive
 explain (analyze, buffers)
 select
